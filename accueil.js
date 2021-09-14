@@ -45,7 +45,7 @@ const getCameras = async () => {
       )
       .join("");
   } catch {
-    console.log("Erreur sur l'appelle de l'API");
+    console.log("Erreur sur l'appelle de l'API || vérifier le DOM");
   }
 };
 getCameras();

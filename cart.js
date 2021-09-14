@@ -115,7 +115,7 @@ let secondValidationForm = () => {
   let validCity = regxCity.test(document.getElementById("city").value);
   let validEmail = regxEmail.test(document.getElementById("email").value);
   //*********************TEST VALIDATION FORMULAIRE************************/
-  //Je test que chaque champ du formulaire sont true
+  //
   if (
     validFirstName &&
     validLastName &&
@@ -178,7 +178,7 @@ let submitForm = () => {
       products,
     };
     //****************************TEST*************************************/
-    //Je vérifie avoir un objet contact, un string array product id et une seconde validation du formulaire
+    //Je vérifie le type objet contact, le type string array product id et une seconde validation du formulaire
     if (
       contact === Object(contact) &&
       Array.isArray(products) &&

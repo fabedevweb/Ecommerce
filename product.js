@@ -37,40 +37,40 @@ let fetchModelCameras = async () => {
 // Afficher mon produit sur la page
 let showProductCamera = async () => {
   await fetchModelCameras();
-
-  //Création d'un objet pour sélectionner les élément à afficher
-  try {
-    let cameraOnPage = new ProductCamera(
-      modelCamera.description,
-      modelCamera.imageUrl,
-      modelCamera.name,
-      modelCamera.price,
-      modelCamera.lenses,
-      modelCamera._id
-    );
+  let cameraOnPage = new ProductCamera(
+    modelCamera.description,
+    modelCamera.imageUrl,
+    modelCamera.name,
+    modelCamera.price,
+    modelCamera.lenses,
+    modelCamera._id
+  );
+  //Je test que mon object cameraOnPage est une instance de ma classe ProductCamera
+  if (cameraOnPage instanceof ProductCamera) {
     for (let camera of modelCamera.lenses) {
-      let variable = (modelCamera.lenses += `<option value="${camera}">${camera}</option>`);
+      let listLenses = (modelCamera.lenses += `<option value="${camera}">${camera}</option>`);
       document.getElementById("product").innerHTML = `
-      <div class="card  mx-auto mt-5 mb-5 col-xxl-6">
-        <img src="${cameraOnPage.imageUrl}" class="card-img-top " alt="...">
-        <div class="card-body">
-          <h5 class="card-title">${cameraOnPage.name}</h5>
-          <p class="card-text">${cameraOnPage.description}</p>
-          <p>${cameraOnPage.price / 100}€</p>
-          <div class="mt-4 formOption ">
-            <form>
-              <label for="option_produit"></label>
-              <select name="option_produit" class="form-select" id="valueOption" aria-label="Default select example">
-                ${variable}
-              </select>
-            </form>
+        <div class="card  mx-auto mt-5 mb-5 col-xxl-6">
+          <img src="${cameraOnPage.imageUrl}" class="card-img-top " alt="...">
+          <div class="card-body">
+            <h5 class="card-title">${cameraOnPage.name}</h5>
+            <p class="card-text">${cameraOnPage.description}</p>
+            <p>${cameraOnPage.price / 100}€</p>
+            <div class="mt-4 formOption ">
+              <form>
+                <label for="option_produit"></label>
+                <select name="option_produit" class="form-select" id="valueOption" aria-label="Default select example">
+                  ${listLenses}
+                </select>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-      `;
+        `;
     }
-  } catch (e) {
-    console.log("Voici l'erreur à corriger : " + e);
+    console.log("Objet contact OK");
+  } else {
+    console.error("Vérifier que l'objet correspond bien à la class Contact");
   }
 };
 showProductCamera();
@@ -78,17 +78,18 @@ showProductCamera();
 // Création d'une fonction functionOnclick qui sera appellé au click sur mon boutton en html ligne 36
 // Afficher un madal avec le résumé de la commande
 let functionOnclick = () => {
-  try {
-    let cameraCart = new ProductCamera(
-      modelCamera.description,
-      modelCamera.imageUrl,
-      modelCamera.name,
-      modelCamera.price,
-      modelCamera.lenses,
-      modelCamera._id
-    );
+  let cameraCart = new ProductCamera(
+    modelCamera.description,
+    modelCamera.imageUrl,
+    modelCamera.name,
+    modelCamera.price,
+    modelCamera.lenses,
+    modelCamera._id
+  );
 
-    //Au click, sur "add to cart", ligne 36 html, afficher un modal
+  //Au click, sur "add to cart", ligne 36 html, afficher un modal
+  //Je test que mon object cameraOnPage est une instance de ma classe ProductCamera
+  if (cameraCart instanceof ProductCamera) {
     document.getElementById("product").innerHTML += `
     <div class="modal fade" id="myModal" role="dialog">
       <div class="modal-dialog">
@@ -121,10 +122,9 @@ let functionOnclick = () => {
     
   </div>
   `;
-  } catch (e) {
-    console.log("Voici l'erreur à corriger : " + e);
+  } else {
+    console.error("Vérifier que l'objet correspond bien à la class Contact");
   }
-
   localStorageProduct();
 };
 
@@ -159,5 +159,8 @@ let localStorageProduct = () => {
     productSaveLocalStorage.push(cameraLocalstorage);
     localStorage.setItem("product", JSON.stringify(productSaveLocalStorage));
     console.log(Array.isArray(productSaveLocalStorage));
+  }
+  if (Array.isArray(productSaveLocalStorage) == false) {
+    console.error("L'objet envoyé n'est pas un array");
   }
 };
