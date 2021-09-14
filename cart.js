@@ -125,15 +125,28 @@ let regxAddress = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$
 let regxCity = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
 let regxEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
 // Variables qui testent chaque champ
-let validFirstName = regxFirstName.test(
-  document.getElementById("firstName").value
-);
-let validLastName = regxFirstName.test(
-  document.getElementById("lastName").value
-);
-let validAddress = regxAddress.test(document.getElementById("address").value);
-let validCity = regxCity.test(document.getElementById("city").value);
-let validEmail = regxEmail.test(document.getElementById("email").value);
+let testForm = () => {
+  let validFirstName = regxFirstName.test(
+    document.getElementById("firstName").value
+  );
+  let validLastName = regxFirstName.test(
+    document.getElementById("lastName").value
+  );
+  let validAddress = regxAddress.test(document.getElementById("address").value);
+  let validCity = regxCity.test(document.getElementById("city").value);
+  let validEmail = regxEmail.test(document.getElementById("email").value);
+  if (
+    validFirstName &&
+    validLastName &&
+    validAddress &&
+    validCity &&
+    validEmail
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 //****************************TEST*************************************/
 if (contactTest instanceof Contact) {
@@ -158,7 +171,7 @@ let submitForm = () => {
     };
     //****************************TEST*************************************/
     //Je vérifie avoir un objet contact et un string array product id
-    if (contact === Object(contact) && Array.isArray(products)) {
+    if (contact === Object(contact) && Array.isArray(products) && testForm()) {
       console.log("contact est bien un objet et products un string array id");
       fetch("http://localhost:3000/api/cameras/order", {
         method: "POST",
@@ -177,8 +190,8 @@ let submitForm = () => {
           console.error("Erreur sur le POST de l'API");
         });
     } else {
-      console.error(
-        "soit contact n'est pas un objet ou alors product n'est pas un string array id"
+      alert(
+        "contact != object || product != string array id || testForm()=false"
       );
     }
 
