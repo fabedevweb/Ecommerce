@@ -103,6 +103,8 @@ let regxFirstName = /^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
 let regxAddress = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
 let regxCity = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
 let regxEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
+let test2 = "hiuhilhomm";
+console.log(regxAddress.test(test2));
 // Variables qui testent chaque champ et valide au click submit ligne 179. Attend TRUE ou FALSE en sortie
 let secondValidationForm = () => {
   let validFirstName = regxFirstName.test(
