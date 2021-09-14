@@ -68,41 +68,34 @@ else {
     .join("");
 
   //*****************************CREATION DU FORMULAIRE de contact quand il y a quelque chose dans le panier**************************************
-  //Création des Regx
-  let regxFirstName = "^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$";
-  let regxAddress = "^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$";
-  let regxCity = "^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$";
-  let regxEmail =
-    "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$";
   //Afficher le formulaire de contact avec champs obligatoires et regex
   document.getElementById("formConcat").innerHTML = `  
                       
                         <form action="" onsubmit="event.preventDefault();submitForm()" class="mt-5">
                         <h2 class="header-form">MY CONTACT FORM</h2>
                           <div>
-                          <input id="firstName" class="col-5" type="text" name="firstName" placeholder="Your firstName" required pattern=${regxFirstName}>
+                          <input id="firstName" class="col-5" type="text" name="firstName" placeholder="Your firstName" required pattern="^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
                             <p class="pfirstName"></p>
                           </div>
                           <div>
-                            <input id="lastName" class="col-5" type="text" name="lastName" placeholder="Your lastName" required pattern=${regxFirstName}>
+                            <input id="lastName" class="col-5" type="text" name="lastName" placeholder="Your lastName" required pattern="^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
                             <p class="plastName"></p>
                           </div>
                           <div>
-                            <input id="address" class="col-5" type="text" name="address" placeholder="Your address" required pattern=${regxAddress}>
+                            <input id="address" class="col-5" type="text" name="address" placeholder="Your address" required pattern="^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
                             <p class="paddress"></p>
                           </div>
                           <div>
-                            <input id="city" class="col-5" type="text" name="city" placeholder="Your city" required pattern=${regxCity}>
+                            <input id="city" class="col-5" type="text" name="city" placeholder="Your city" required pattern="^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
                             <p class="pcity"></p>
                           </div>
                           <div>
-                            <input id="email" class="col-5" type="email" name="email" placeholder="Your email" required pattern=${regxEmail}>
+                            <input id="email" class="col-5" type="email" name="email" placeholder="Your email" required pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$">
                             <p class="pemail"></p>
                           </div>
                           <input type="submit" value="Submit" class="btn btn-secondary">
                         </form>`;
 }
-
 //*********************************************ENVOI DU FORMULAIRE ET DU PRODUIT AU BACKEND****************************************/
 //Création d'une classe pour l'objet contact envoyé au backend
 class Contact {
@@ -126,6 +119,21 @@ function formLocalstorage() {
   return contactForm;
 }
 let contactTest = formLocalstorage();
+//Création des Regx
+let regxFirstName = /^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
+let regxAddress = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
+let regxCity = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
+let regxEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
+// Variables qui testent chaque champ
+let validFirstName = regxFirstName.test(
+  document.getElementById("firstName").value
+);
+let validLastName = regxFirstName.test(
+  document.getElementById("lastName").value
+);
+let validAddress = regxAddress.test(document.getElementById("address").value);
+let validCity = regxCity.test(document.getElementById("city").value);
+let validEmail = regxEmail.test(document.getElementById("email").value);
 
 //****************************TEST*************************************/
 if (contactTest instanceof Contact) {
@@ -152,27 +160,28 @@ let submitForm = () => {
     //Je vérifie avoir un objet contact et un string array product id
     if (contact === Object(contact) && Array.isArray(products)) {
       console.log("contact est bien un objet et products un string array id");
+      fetch("http://localhost:3000/api/cameras/order", {
+        method: "POST",
+        body: JSON.stringify(localStorageBackend),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((dataModel) => dataModel.json())
+        .then(function (value) {
+          console.log(value);
+          localStorage.setItem("Order", JSON.stringify(value));
+          window.location = "confirmation.html";
+        })
+        .catch(() => {
+          console.error("Erreur sur le POST de l'API");
+        });
     } else {
       console.error(
         "soit contact n'est pas un objet ou alors product n'est pas un string array id"
       );
     }
-    fetch("http://localhost:3000/api/cameras/order", {
-      method: "POST",
-      body: JSON.stringify(localStorageBackend),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((dataModel) => dataModel.json())
-      .then(function (value) {
-        console.log(value);
-        localStorage.setItem("Order", JSON.stringify(value));
-        window.location = "confirmation.html";
-      })
-      .catch(() => {
-        console.error("Erreur sur le POST de l'API");
-      });
+
     //****************************TEST*************************************/
   } catch (e) {
     console.log("Voici l'erreur à corriger : " + e);
