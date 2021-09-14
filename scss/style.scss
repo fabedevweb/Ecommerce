@@ -1,0 +1,61 @@
+@import "variable_overrides";
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+h2 {
+  color: white;
+}
+
+.paragraph-accueil {
+  color: white;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+.card-title__h2 {
+  font-size: 1.5rem;
+  height: 100px;
+}
+
+.accueil__h2 {
+  color: #6c757d;
+  text-align: center;
+  padding-top: 120px;
+}
+
+.header-form {
+  color: #6c757d;
+}
+
+.paragraph-accueil {
+  color: #6c757d;
+}
+
+.header-accueil {
+  color: #6c757d;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+footer {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.headerCamera {
+  background-image: url("../images/camera-vintage.jpg");
+  background-attachment: fixed;
+  width: 100%;
+  height: 500px;
+  background-size: cover;
+  background-position: center;
+}
+
+.header-h1 {
+  text-align: center;
+  padding-top: 205px;
+  color: crimson;
+}
