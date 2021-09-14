@@ -97,6 +97,39 @@ else {
                         </form>`;
 }
 //*********************************************ENVOI DU FORMULAIRE ET DU PRODUIT AU BACKEND****************************************/
+//*************SECONDE VALIDATION FORMULAIRE****************/
+//Création des Regex
+let regxFirstName = /^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
+let regxAddress = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
+let regxCity = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
+let regxEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
+// Variables qui testent chaque champ et valide au click submit ligne 179. Attend TRUE ou FALSE en sortie
+let secondValidationForm = () => {
+  let validFirstName = regxFirstName.test(
+    document.getElementById("firstName").value
+  );
+  let validLastName = regxFirstName.test(
+    document.getElementById("lastName").value
+  );
+  let validAddress = regxAddress.test(document.getElementById("address").value);
+  let validCity = regxCity.test(document.getElementById("city").value);
+  let validEmail = regxEmail.test(document.getElementById("email").value);
+  //*********************TEST VALIDATION FORMULAIRE************************/
+  //Je test que chaque champ du formulaire sont true
+  if (
+    validFirstName &&
+    validLastName &&
+    validAddress &&
+    validCity &&
+    validEmail
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
+//*************FIN DE LA SECONDE VALIDATION FORMULAIRE****************/
+
 //Création d'une classe pour l'objet contact envoyé au backend
 class Contact {
   constructor(firstName, lastName, address, city, email) {
@@ -118,43 +151,17 @@ function formLocalstorage() {
   );
   return contactForm;
 }
+//****************************TEST OBJET CONTACT*************************************/
+//Je test que mon object contactForm correspond à ma classe Contact
 let contactTest = formLocalstorage();
-//Création des Regx
-let regxFirstName = /^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
-let regxAddress = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
-let regxCity = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
-let regxEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
-// Variables qui testent chaque champ
-let testForm = () => {
-  let validFirstName = regxFirstName.test(
-    document.getElementById("firstName").value
-  );
-  let validLastName = regxFirstName.test(
-    document.getElementById("lastName").value
-  );
-  let validAddress = regxAddress.test(document.getElementById("address").value);
-  let validCity = regxCity.test(document.getElementById("city").value);
-  let validEmail = regxEmail.test(document.getElementById("email").value);
-  if (
-    validFirstName &&
-    validLastName &&
-    validAddress &&
-    validCity &&
-    validEmail
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-//****************************TEST*************************************/
 if (contactTest instanceof Contact) {
   console.log("Objet contact OK");
 } else {
   console.error("Vérifier que l'objet correspond bien à la class Contact");
 }
+//****************************FIN DU TEST OBJET CONTACT*************************************/
 
+//Création du string array id à envoyer au backend
 let products = [];
 let productLocastorage = JSON.parse(localStorage.getItem("product"));
 for (let product of productLocastorage) {
@@ -162,6 +169,7 @@ for (let product of productLocastorage) {
   products.push(productsId);
 }
 
+//Fonction qui envoie mon objet contact et string array id au backend
 let submitForm = () => {
   try {
     let contact = formLocalstorage();
@@ -170,8 +178,12 @@ let submitForm = () => {
       products,
     };
     //****************************TEST*************************************/
-    //Je vérifie avoir un objet contact et un string array product id
-    if (contact === Object(contact) && Array.isArray(products) && testForm()) {
+    //Je vérifie avoir un objet contact, un string array product id et une seconde validation du formulaire
+    if (
+      contact === Object(contact) &&
+      Array.isArray(products) &&
+      secondValidationForm()
+    ) {
       console.log("contact est bien un objet et products un string array id");
       fetch("http://localhost:3000/api/cameras/order", {
         method: "POST",
@@ -196,8 +208,9 @@ let submitForm = () => {
     }
 
     //****************************TEST*************************************/
+    //Je test l'envoie des objets "contact" et "products" attendu en sortie
   } catch (e) {
-    console.log("Voici l'erreur à corriger : " + e);
+    console.log("Vérifier l'orthographe de l'objet : " + e);
   }
 };
 //*************************************Supprimer individuellement chaque produit du panier*************************************/
