@@ -104,40 +104,59 @@ else {
 }
 
 //*********************************************ENVOI DU FORMULAIRE ET DU PRODUIT AU BACKEND****************************************/
-//Fontion qui envoie le formulaire dans le local storage
+//Création d'une classe pour l'objet contact envoyé au backend
+class Contact {
+  constructor(firstName, lastName, address, city, email) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.address = address;
+    this.city = city;
+    this.email = email;
+  }
+}
+//Création de l'objet contact envoyé au backend
 function formLocalstorage() {
-  let contactForm = {
-    firstName: document.getElementById("firstName").value,
-    lastName: document.getElementById("lastName").value,
-    address: document.getElementById("address").value,
-    city: document.getElementById("city").value,
-    email: document.getElementById("email").value,
-  };
+  let contactForm = new Contact(
+    document.getElementById("firstName").value,
+    document.getElementById("lastName").value,
+    document.getElementById("address").value,
+    document.getElementById("city").value,
+    document.getElementById("email").value
+  );
   return contactForm;
 }
+let contactTest = formLocalstorage();
 
-//Fonction qui envoie un string array id et un objet contact au backend (appellée par le input ligne 101)
+//****************************TEST*************************************/
+if (contactTest instanceof Contact) {
+  console.log("Objet contact OK");
+} else {
+  console.error("Vérifier que l'objet correspond bien à la class Contact");
+}
+
+let products = [];
+let productLocastorage = JSON.parse(localStorage.getItem("product"));
+for (let product of productLocastorage) {
+  let productsId = product.id;
+  products.push(productsId);
+}
+
 let submitForm = () => {
-  //Boucle pour récupérer un string array id
-
-  let contact = formLocalstorage();
-  //Stockage du ou des produits dans une variable
-  let productLocastorage = JSON.parse(localStorage.getItem("product"));
-  for (let product of productLocastorage) {
-    let productsId = product.id;
-    let products = [];
-    products.push(productsId);
-
-    // Objet (contact ligne 123 et products ligne 130) à envoyer au backend
+  try {
+    let contact = formLocalstorage();
     let localStorageBackend = {
       contact,
       products,
     };
-
-    // ENVOI de l'objet localStorageBackend au backend
-    //Je vérifie si les objets sont présents et que leur type est respecté
-    //if (contact === Object(contact) && Array.isArray(products)) {
-
+    //****************************TEST*************************************/
+    //Je vérifie avoir un objet contact et un string array product id
+    if (contact === Object(contact) && Array.isArray(products)) {
+      console.log("contact est bien un objet et products un string array id");
+    } else {
+      console.error(
+        "soit contact n'est pas un objet ou alors product n'est pas un string array id"
+      );
+    }
     fetch("http://localhost:3000/api/cameras/order", {
       method: "POST",
       body: JSON.stringify(localStorageBackend),
@@ -152,11 +171,13 @@ let submitForm = () => {
         window.location = "confirmation.html";
       })
       .catch(() => {
-        alert("Erreur sur le POST de l'API");
+        console.error("Erreur sur le POST de l'API");
       });
+    //****************************TEST*************************************/
+  } catch (e) {
+    console.log("Voici l'erreur à corriger : " + e);
   }
 };
-
 //*************************************Supprimer individuellement chaque produit du panier*************************************/
 
 //Je sélection tous les bouttons créés à chaque ligne

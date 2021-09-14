@@ -3,7 +3,11 @@ let orderLocalstorage = JSON.parse(localStorage.getItem("Order"));
 
 //Convertion de l'objet en array pour ne récupérer que l'order envoyé par le backend
 let orderLocalstorageArray = Object.values(orderLocalstorage);
-
+if (orderLocalstorageArray[2] == undefined) {
+  console.error("Order non reçu");
+} else {
+  console.log("Order bien reçu");
+}
 //Je récupère le prix total dans le localstorage
 let totalPriceLocalStorage = JSON.parse(localStorage.getItem("totalPrice"));
 
