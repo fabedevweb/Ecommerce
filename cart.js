@@ -1,8 +1,8 @@
 // JE regarde ce qu'il y a dans le LocaStorage avec getItem
 let productSaveLocalStorage = JSON.parse(localStorage.getItem("product"));
 
-//Si le panier est vide AFFICHER un message et inviter le client à revenir au shopping
-if (productSaveLocalStorage == null) {
+//******************Si le panier est vide AFFICHER un message et inviter le client à revenir au shopping***********************
+if (productSaveLocalStorage == 0) {
   document.getElementById("cartForm").innerHTML = `
     <div class="center-block  text-center">
       <div class=" text-center ">
@@ -96,15 +96,16 @@ else {
                           <input type="submit" value="Submit" class="btn btn-secondary">
                         </form>`;
 }
-//*********************************************ENVOI DU FORMULAIRE ET DU PRODUIT AU BACKEND****************************************/
+
 //*************SECONDE VALIDATION FORMULAIRE****************/
 //Création des Regex
 let regxFirstName = /^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
-let regxAddress = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
-let regxCity = /^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
+let regxAddress = /^[0-9a-zA-Z\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50}$/;
+let regxCity = /^([0-9a-zA-Z\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
 let regxEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
-let test2 = "hiuhilhomm";
-console.log(regxAddress.test(test2));
+//Test Regex
+let testRegex = "495310 Saint-Ouenl'Aumone";
+console.log(regxCity.test(testRegex));
 // Variables qui testent chaque champ et valide au click submit ligne 179. Attend TRUE ou FALSE en sortie
 let secondValidationForm = () => {
   let validFirstName = regxFirstName.test(
@@ -144,22 +145,29 @@ class Contact {
 }
 //Création de l'objet contact envoyé au backend
 function formLocalstorage() {
-  let contactForm = new Contact(
-    document.getElementById("firstName").value,
-    document.getElementById("lastName").value,
-    document.getElementById("address").value,
-    document.getElementById("city").value,
-    document.getElementById("email").value
-  );
-  return contactForm;
+  try {
+    let contactForm = new Contact(
+      document.getElementById("firstName").value,
+      document.getElementById("lastName").value,
+      document.getElementById("address").value,
+      document.getElementById("city").value,
+      document.getElementById("email").value
+    );
+    return contactForm;
+  } catch (e) {
+    console.log("Le formulaire n'existe plus ==> " + e);
+  }
 }
+
 //****************************TEST OBJET CONTACT*************************************/
 //Je test que mon object contactForm correspond à ma classe Contact
 let contactTest = formLocalstorage();
 if (contactTest instanceof Contact) {
   console.log("Objet contact OK");
+} else if (productSaveLocalStorage == 0) {
+  console.log("Le formulaire n'est plus disponible");
 } else {
-  console.error("Vérifier que l'objet correspond bien à la class Contact");
+  console.log("Vérifier que l'objet correspond bien à la class Contact");
 }
 //****************************FIN DU TEST OBJET CONTACT*************************************/
 
@@ -232,8 +240,8 @@ for (let i = 0; i < btnDelete.length; i++) {
     //Une fois la ligne du tableau supprimée, je réinjecte les lignes restantes dans le localstorage en écrasant l'ancienne key
     localStorage.setItem("product", JSON.stringify(productSaveLocalStorage));
     //Je recharge la page pour afficher la mise à jour du Local storage sur la page
-    if (productSaveLocalStorage.length == 0) {
-      localStorage.clear();
+    if (productSaveLocalStorage == 0) {
+      formLocalstorage() == null;
     }
     location.reload();
   });
