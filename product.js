@@ -36,41 +36,48 @@ let fetchModelCameras = async () => {
 
 // Afficher mon produit sur la page
 let showProductCamera = async () => {
-  await fetchModelCameras();
-  let cameraOnPage = new ProductCamera(
-    modelCamera.description,
-    modelCamera.imageUrl,
-    modelCamera.name,
-    modelCamera.price,
-    modelCamera.lenses,
-    modelCamera._id
-  );
-  //Je test que mon object cameraOnPage est une instance de ma classe ProductCamera
-  if (cameraOnPage instanceof ProductCamera) {
-    for (let camera of modelCamera.lenses) {
-      let listLenses = (modelCamera.lenses += `<option value="${camera}">${camera}</option>`);
-      document.getElementById("product").innerHTML = `
-        <div class="card  mx-auto mt-5 mb-5 col-xxl-6">
-          <img src="${cameraOnPage.imageUrl}" class="card-img-top " alt="...">
-          <div class="card-body">
-            <h5 class="card-title">${cameraOnPage.name}</h5>
-            <p class="card-text">${cameraOnPage.description}</p>
-            <p>${cameraOnPage.price / 100}€</p>
-            <div class="mt-4 formOption ">
-              <form>
-                <label for="option_produit"></label>
-                <select name="option_produit" class="form-select" id="valueOption" aria-label="Default select example">
-                  ${listLenses}
-                </select>
-              </form>
+  try {
+    await fetchModelCameras();
+    let cameraOnPage = new ProductCamera(
+      modelCamera.description,
+      modelCamera.imageUrl,
+      modelCamera.name,
+      modelCamera.price,
+      modelCamera.lenses,
+      modelCamera._id
+    );
+
+    //Je test que mon object cameraOnPage est une instance de ma classe ProductCamera
+    if (cameraOnPage instanceof ProductCamera) {
+      for (let camera of modelCamera.lenses) {
+        let listLenses = (modelCamera.lenses += `<option value="${camera}">${camera}</option>`);
+        document.getElementById("product").innerHTML = `
+          <div class="card  mx-auto mt-5 mb-5 col-xxl-6">
+            <img src="${cameraOnPage.imageUrl}" class="card-img-top " alt="...">
+            <div class="card-body">
+              <h5 class="card-title">${cameraOnPage.name}</h5>
+              <p class="card-text">${cameraOnPage.description}</p>
+              <p>${cameraOnPage.price / 100}€</p>
+              <div class="mt-4 formOption ">
+                <form>
+                  <label for="option_produit"></label>
+                  <select name="option_produit" class="form-select" id="valueOption" aria-label="Default select example">
+                    ${listLenses}
+                  </select>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-        `;
+          `;
+      }
+      console.log("Objet contact OK");
+    } else {
+      console.error(
+        "Vérifier que l'objet correspond bien à la class ProductCamera"
+      );
     }
-    console.log("Objet contact OK");
-  } else {
-    console.error("Vérifier que l'objet correspond bien à la class Contact");
+  } catch (e) {
+    console.log("Erreur ==> " + e);
   }
 };
 showProductCamera();
