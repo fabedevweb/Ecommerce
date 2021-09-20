@@ -1,5 +1,6 @@
 // JE regarde ce qu'il y a dans le LocaStorage avec getItem
 let productSaveLocalStorage = JSON.parse(localStorage.getItem("product"));
+
 try {
   productSaveLocalStorage;
 } catch {
@@ -72,6 +73,7 @@ const regxFirstName = /^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
 const regxAddress = /^[0-9a-zA-Z\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50}$/;
 const regxCity = /^([0-9a-zA-Z\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
 const regxEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
+
 // Variables qui testent chaque champ et valide au click submit ligne 179. Attend TRUE ou FALSE en sortie
 let secondValidationForm = () => {
   let validFirstName = regxFirstName.test(
@@ -108,6 +110,7 @@ class Contact {
     this.email = email;
   }
 }
+
 //Création de l'objet contact envoyé au backend
 function formLocalstorage() {
   try {
@@ -120,26 +123,28 @@ function formLocalstorage() {
     );
     return contactForm;
   } catch (e) {
-    console.log("Le formulaire n'existe plus ==> " + e);
+    console.log("Erreur suivante" + e);
   }
 }
 
 //****************************TEST OBJET CONTACT*************************************/
 //Je test que mon object contactForm correspond à ma classe Contact
-let contactTest = formLocalstorage();
-if (contactTest instanceof Contact) {
-  console.log("Objet contact OK");
-} else if (productSaveLocalStorage == 0) {
-  console.log("Le formulaire n'est plus disponible");
-} else {
-  console.log("Vérifier que l'objet correspond bien à la class Contact");
+function testObjectContact() {
+  let contactTest = formLocalstorage();
+  if (contactTest instanceof Contact) {
+  } else if (productSaveLocalStorage == 0) {
+    console.log("Le formulaire n'est plus disponible");
+  } else {
+    console.log("Vérifier que l'objet correspond bien à la class Contact");
+  }
 }
+testObjectContact();
 //****************************FIN DU TEST OBJET CONTACT*************************************/
 
 //Création du string array id à envoyer au backend
 let products = [];
-let productLocastorage = JSON.parse(localStorage.getItem("product"));
-for (let product of productLocastorage) {
+//let productLocastorage = JSON.parse(localStorage.getItem("product"));
+for (let product of productSaveLocalStorage) {
   let productsId = product.id;
   products.push(productsId);
 }
@@ -193,21 +198,32 @@ let submitForm = () => {
 //Je sélection tous les bouttons créés à chaque ligne
 let btnDelete = document.getElementsByClassName("btnDeleteProduct");
 
-for (let i = 0; i < btnDelete.length; i++) {
-  //J'écoute chacun des bouttons
-  btnDelete[i].addEventListener("click", (e) => {
-    e.preventDefault();
-    //Vérification de la sélection d'un id unique
-    let remove = productSaveLocalStorage[i].id;
-    console.log(remove);
-    //Quand je click sur un boutton je supprime dans le LocalStorage la ligne du tableau qui lui correspond
-    productSaveLocalStorage.splice(i, 1);
-    //Une fois la ligne du tableau supprimée, je réinjecte les lignes restantes dans le localstorage en écrasant l'ancienne key
-    localStorage.setItem("product", JSON.stringify(productSaveLocalStorage));
-    //Je recharge la page pour afficher la mise à jour du Local storage sur la page
-    if (productSaveLocalStorage == 0) {
-      formLocalstorage() == null;
+function deleteOneProductCart() {
+  try {
+    for (let i = 0; i < btnDelete.length; i++) {
+      //J'écoute chacun des bouttons
+      btnDelete[i].addEventListener("click", (e) => {
+        e.preventDefault();
+        //Vérification de la sélection d'un id unique
+        let remove = productSaveLocalStorage[i].id;
+        console.log(remove);
+        //Quand je click sur un boutton je supprime dans le LocalStorage la ligne du tableau qui lui correspond
+        productSaveLocalStorage.splice(i, 1);
+        //Une fois la ligne du tableau supprimée, je réinjecte les lignes restantes dans le localstorage en écrasant l'ancienne key
+        localStorage.setItem(
+          "product",
+          JSON.stringify(productSaveLocalStorage)
+        );
+        //Je recharge la page pour afficher la mise à jour du Local storage sur la page
+        if (productSaveLocalStorage == 0) {
+          formLocalstorage() == null;
+        }
+        location.reload();
+      });
     }
-    location.reload();
-  });
+  } catch (e) {
+    console.log("Erreur suivante : " + e);
+  }
 }
+
+deleteOneProductCart();
