@@ -1,111 +1,77 @@
 // JE regarde ce qu'il y a dans le LocaStorage avec getItem
 let productSaveLocalStorage = JSON.parse(localStorage.getItem("product"));
-
-//******************Si le panier est vide AFFICHER un message et inviter le client à revenir au shopping***********************
-if (productSaveLocalStorage == 0) {
-  document.getElementById("cartForm").innerHTML = `
-    <div class="center-block  text-center">
-      <div class=" text-center ">
-        <div class="card-header">
-            Camera Shop
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Hi</h5>
-          <p class="card-text">YOUR SHOPPING CART IS EMPTY</p>
-          <a href="index.html" class="btn btn-primary">Continue shopping</a>
-        </div>
-        <div class="card-footer text-muted">
-          Camera Shop
-        </div>
-      </div>
-    </div>
-    `;
+try {
+  productSaveLocalStorage;
+} catch {
+  console.error("Parsing error:", e);
 }
-//***************S'il y a des produits dans le localStorage, afficher les produits et un formulaire de contact**********************
-else {
-  // Calcul du prix total
-  let total = 0;
 
-  for (let cart of productSaveLocalStorage) {
-    total += cart.price / 100;
+function showProductCartInTable() {
+  try {
+    if (productSaveLocalStorage.length) {
+      // Calcul du prix total
+      let total = 0;
+
+      for (let cart of productSaveLocalStorage) {
+        total += cart.price / 100;
+      }
+      //Stocker le prix total pour l'afficher plus tard sur la page de cofirmation de commande
+      localStorage.setItem("totalPrice", JSON.stringify(total));
+      //Afficher un tableau de base pour afficher Name, id, Price et Delete
+      document.getElementById("cartTable").innerHTML = `                   
+                                                          <table class="table">
+                                                            <thead>
+                                                              <tr>
+                                                                <th scope="col">Name</th>
+                                                                <th scope="col">id</th>
+                                                                <th scope="col">Price</th>
+                                                                <th scope="col">Delete</th>
+                                                              </tr>
+                                                            </thead>
+                                                            <tbody id="bodyTableCart"></tbody>
+                                                            <tr id="tableCart">
+                                                            <th>TOTAL</th>
+                                                            <th></th>
+                                                            <th>${total}€</th>
+                                                            <th></th>
+                                                            </tr>
+                                                          </table>
+                                                       
+                                                      `;
+      //Ajouter dans le tableau tous les produits sélectionnés par l'utilisateur
+      document.getElementById(
+        "bodyTableCart"
+      ).innerHTML = productSaveLocalStorage
+        .map(
+          (camera) => `
+                       <tr id="${camera.id}">
+                         <td>${camera.name}</td>
+                         <td>${camera.id}</td>
+                         <td>${camera.price / 100}€</td>
+                         <th scope="col">
+                           <button class="fas fa-times-circle cursor btnRemove btn btn-outline-secondary btnDeleteProduct" ></button>
+                         </th>
+                       </tr>
+                       `
+        )
+        .join("");
+      document.getElementById("cartForm").style.display = "none";
+    } else {
+      document.getElementById("formConcat").style.display = "none";
+      document.getElementById("cartForm").style.display = "inline";
+    }
+  } catch (e) {
+    console.log("Veuillez pointer correctement dans le DOM " + e);
   }
-  //Stocker le prix total pour l'afficher plus tard sur la page de cofirmation de commande
-  localStorage.setItem("totalPrice", JSON.stringify(total));
-  //Afficher un tableau de base pour afficher Name, id, Price et Delete
-  document.getElementById("cartTable").innerHTML = `
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">id</th>
-          <th scope="col">Price</th>
-          <th scope="col">Delete</th>
-        </tr>
-      </thead>
-      <tbody id="bodyTableCart">
-      </tbody>
-      <tr >
-          <th >TOTAL</th>
-          <th></th>
-          <th>${total}€</th>
-          <th></th>
-      </tr>
-    </table>`;
-  //Ajouter dans le tableau tous les produits sélectionnés par l'utilisateur
-  document.getElementById("bodyTableCart").innerHTML = productSaveLocalStorage
-    .map(
-      (camera) => `
-                    <tr id="${camera.id}">
-                      <td>${camera.name}</td>
-                      <td>${camera.id}</td>
-                      <td>${camera.price / 100}€</td>
-                      <th scope="col">
-                        <button class="fas fa-times-circle cursor btnRemove btn btn-outline-secondary btnDeleteProduct" ></button>
-                      </th>
-                    </tr>
-                    `
-    )
-    .join("");
-
-  //*****************************CREATION DU FORMULAIRE de contact quand il y a quelque chose dans le panier**************************************
-  //Afficher le formulaire de contact avec champs obligatoires et regex
-  document.getElementById("formConcat").innerHTML = `  
-                      
-                        <form action="" onsubmit="event.preventDefault();submitForm()" class="mt-5">
-                        <h2 class="header-form">MY CONTACT FORM</h2>
-                          <div>
-                          <input id="firstName" class="col-5" type="text" name="firstName" placeholder="Your firstName" required pattern="^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
-                            <p class="pfirstName"></p>
-                          </div>
-                          <div>
-                            <input id="lastName" class="col-5" type="text" name="lastName" placeholder="Your lastName" required pattern="^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
-                            <p class="plastName"></p>
-                          </div>
-                          <div>
-                            <input id="address" class="col-5" type="text" name="address" placeholder="Your address" required pattern="^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
-                            <p class="paddress"></p>
-                          </div>
-                          <div>
-                            <input id="city" class="col-5" type="text" name="city" placeholder="Your city" required pattern="^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
-                            <p class="pcity"></p>
-                          </div>
-                          <div>
-                            <input id="email" class="col-5" type="email" name="email" placeholder="Your email" required pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$">
-                            <p class="pemail"></p>
-                          </div>
-                          <input type="submit" value="Submit" class="btn btn-secondary">
-                        </form>`;
 }
+showProductCartInTable();
 
 //*************SECONDE VALIDATION FORMULAIRE****************/
 //Création des Regex
-let regxFirstName = /^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
-let regxAddress = /^[0-9a-zA-Z\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50}$/;
-let regxCity = /^([0-9a-zA-Z\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
-let regxEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
-//Test Regex
-let testRegex = "495310 Saint-Ouenl'Aumone";
-console.log(regxCity.test(testRegex));
+const regxFirstName = /^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
+const regxAddress = /^[0-9a-zA-Z\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50}$/;
+const regxCity = /^([0-9a-zA-Z\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
+const regxEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
 // Variables qui testent chaque champ et valide au click submit ligne 179. Attend TRUE ou FALSE en sortie
 let secondValidationForm = () => {
   let validFirstName = regxFirstName.test(
@@ -118,7 +84,6 @@ let secondValidationForm = () => {
   let validCity = regxCity.test(document.getElementById("city").value);
   let validEmail = regxEmail.test(document.getElementById("email").value);
   //*********************TEST VALIDATION FORMULAIRE************************/
-  //
   if (
     validFirstName &&
     validLastName &&

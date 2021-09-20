@@ -37,17 +37,55 @@
                     
                 </div>
                 <div id="cartTable">
-
+ 
                 </div>
                 
                 <div id="cartForm">
+                    <div class="center-block  text-center">
+                        <div class=" text-center ">
+                          <div class="card-header">
+                              Camera Shop
+                          </div>
+                          <div class="card-body">
+                            <h5 class="card-title">Hi</h5>
+                            <p class="card-text">YOUR SHOPPING CART IS EMPTY</p>
+                            <a href="index.html" class="btn btn-primary">Continue shopping</a>
+                          </div>
+                          <div class="card-footer text-muted">
+                            Camera Shop
+                          </div>
+                        </div>
+                      </div>
                 </div>
             
                 
                 <div class="modal"></div>
                 <div class="">
                     <div id="formConcat">
-                    
+                        <form action="" onsubmit="event.preventDefault();submitForm()" class="mt-5">
+                            <h2 class="header-form">MY CONTACT FORM</h2>
+                              <div>
+                              <input id="firstName" class="col-5" type="text" name="firstName" placeholder="Your firstName" required pattern="^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
+                                <p class="pfirstName"></p>
+                              </div>
+                              <div>
+                                <input id="lastName" class="col-5" type="text" name="lastName" placeholder="Your lastName" required pattern="^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
+                                <p class="plastName"></p>
+                              </div>
+                              <div>
+                                <input id="address" class="col-5" type="text" name="address" placeholder="Your address" required pattern="^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
+                                <p class="paddress"></p>
+                              </div>
+                              <div>
+                                <input id="city" class="col-5" type="text" name="city" placeholder="Your city" required pattern="^([0-9a-zA-Z\\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$">
+                                <p class="pcity"></p>
+                              </div>
+                              <div>
+                                <input id="email" class="col-5" type="email" name="email" placeholder="Your email" required pattern="^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$">
+                                <p class="pemail"></p>
+                              </div>
+                              <input type="submit" value="Submit" class="btn btn-secondary">
+                            </form>
                     </div>
                 </div>
 
