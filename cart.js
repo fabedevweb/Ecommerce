@@ -147,7 +147,6 @@ testFormLocalstorage();
 
 //Création du string array id à envoyer au backend
 let products = [];
-//let productLocastorage = JSON.parse(localStorage.getItem("product"));
 for (let product of productSaveLocalStorage) {
   let productsId = product.id;
   products.push(productsId);
@@ -219,6 +218,7 @@ function deleteOneProductCart() {
           JSON.stringify(productSaveLocalStorage)
         );
         //Je recharge la page pour afficher la mise à jour du Local storage sur la page
+
         location.reload();
       });
     }
