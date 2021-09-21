@@ -15,7 +15,7 @@ class ProductCamera {
   }
 }
 
-// Appeller l'API pour chaque ID pour n'afficher que le produit sélectionné
+// Appeller l'API pour afficher les produits en fonction de leur id
 let fetchModelCameras = async () => {
   try {
     await fetch(`http://localhost:3000/api/cameras/${idCamera}`)
@@ -34,7 +34,7 @@ let fetchModelCameras = async () => {
   }
 };
 
-// Afficher mon produit sur la page
+// Afficher mes produits sur la page
 let showProductCamera = async () => {
   try {
     await fetchModelCameras();
@@ -135,7 +135,8 @@ let functionOnclick = () => {
   localStorageProduct();
 };
 
-// Envoyer dans le localstorage mon objet objectCameraLocalstorage
+// *********************** Création du Local storage **************************
+// Envoyer dans le localstorage mon objet cameraLocalstorage
 let localStorageProduct = () => {
   let cameraLocalstorage = new ProductCamera(
     modelCamera.description,
@@ -145,8 +146,6 @@ let localStorageProduct = () => {
     modelCamera.lenses,
     modelCamera._id
   );
-
-  // *********************** Création du Local storage **************************
   //Je regarde s'il y a quelque-chose dans le LS avec getItem(format JSON)
   //Pour une meilleure lisibilité, je converti en JS avec JSON.parse.
   let productSaveLocalStorage = JSON.parse(localStorage.getItem("product"));

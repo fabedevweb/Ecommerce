@@ -1,26 +1,27 @@
-// JE regarde ce qu'il y a dans le LocaStorage avec getItem
-let productSaveLocalStorage = JSON.parse(localStorage.getItem("product"));
+//J'importe mon objet présent dans le localstorage au format JS
 function unityTestProductSaveLocalStorage() {
   try {
-    productSaveLocalStorage;
+    let productSaveLocalStorage = JSON.parse(localStorage.getItem("product"));
+    return productSaveLocalStorage;
   } catch {
     console.error("Parsing error:", e);
   }
 }
 unityTestProductSaveLocalStorage();
 
+//Afficher sur la page tous les produits sélectionnés
 function showProductCartInTable() {
   try {
-    if (productSaveLocalStorage.length) {
+    if (unityTestProductSaveLocalStorage().length) {
       // Calcul du prix total
       let total = 0;
 
-      for (let cart of productSaveLocalStorage) {
+      for (let cart of unityTestProductSaveLocalStorage()) {
         total += cart.price / 100;
       }
-      //Stocker le prix total pour l'afficher plus tard sur la page de cofirmation de commande
+      //Stocker le prix total pour l'afficher plus tard sur la page de confirmation de la commande
       localStorage.setItem("totalPrice", JSON.stringify(total));
-      //Afficher un tableau de base pour afficher Name, id, Price et Delete
+      //Header du tableau pour afficher les produits
       document.getElementById("cartTable").innerHTML = `                   
                                                           <table class="table">
                                                             <thead>
@@ -44,7 +45,7 @@ function showProductCartInTable() {
       //Ajouter dans le tableau tous les produits sélectionnés par l'utilisateur
       document.getElementById(
         "bodyTableCart"
-      ).innerHTML = productSaveLocalStorage
+      ).innerHTML = unityTestProductSaveLocalStorage()
         .map(
           (camera) => `
                        <tr id="${camera.id}">
@@ -58,9 +59,12 @@ function showProductCartInTable() {
                        `
         )
         .join("");
+      //Je n'affiche pas le message indiquant que le panier est vide
       document.getElementById("cartEmpy").style.display = "none";
     } else {
+      //Je n'affiche pas le formulaire de contact
       document.getElementById("formConcat").style.display = "none";
+      //J'affiche le message indiquant que le panier est vide
       document.getElementById("cartEmpy").style.display = "inline";
     }
   } catch (e) {
@@ -69,14 +73,14 @@ function showProductCartInTable() {
 }
 showProductCartInTable();
 
-//*************SECONDE VALIDATION FORMULAIRE****************/
+//*************VALIDATION FORMULAIRE COTE JS****************/
 //Création des Regex
 const regxFirstName = /^([a-zA-Z'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
 const regxAddress = /^[0-9a-zA-Z\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50}$/;
 const regxCity = /^([0-9a-zA-Z\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
 const regxEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
 
-// Variables qui testent chaque champ et valide au click submit ligne 179. Attend TRUE ou FALSE en sortie
+// Variables qui testent chaque champ et valide au click
 let validationForm = () => {
   try {
     let validFirstName = regxFirstName.test(
@@ -106,9 +110,7 @@ let validationForm = () => {
   }
 };
 
-//*************FIN DE LA SECONDE VALIDATION FORMULAIRE****************/
-
-//Création d'une classe pour l'objet contact envoyé au backend
+//Création d'une classe pour l'objet contact à envoyer au backend
 class Contact {
   constructor(firstName, lastName, address, city, email) {
     this.firstName = firstName;
@@ -119,7 +121,7 @@ class Contact {
   }
 }
 
-//Création de l'objet contact envoyé au backend
+//Création de l'objet contact à envoyer au backend
 function formLocalstorage() {
   let contactForm = new Contact(
     document.getElementById("firstName").value,
@@ -136,7 +138,7 @@ function formLocalstorage() {
 function testFormLocalstorage() {
   let contactTest = formLocalstorage();
   if (contactTest instanceof Contact) {
-  } else if (productSaveLocalStorage == 0) {
+  } else if (!unityTestProductSaveLocalStorage()) {
     console.log("Le formulaire n'est plus disponible");
   } else {
     console.log("Vérifier que l'objet correspond bien à la class Contact");
@@ -147,12 +149,12 @@ testFormLocalstorage();
 
 //Création du string array id à envoyer au backend
 let products = [];
-for (let product of productSaveLocalStorage) {
+for (let product of unityTestProductSaveLocalStorage()) {
   let productsId = product.id;
   products.push(productsId);
 }
 
-//Fonction qui envoie mon objet contact et string array id au backend
+//Fonction qui envoie mon objet contact et le string array id au backend
 let submitForm = () => {
   try {
     let contact = formLocalstorage();
@@ -161,7 +163,7 @@ let submitForm = () => {
       products,
     };
     //****************************TEST*************************************/
-    //Je vérifie le type objet contact, le type string array product id et une seconde validation du formulaire
+    //Je vérifie le type objet contact, le type string array product id et que la validation du formulaire est true
     if (
       contact === Object(contact) &&
       Array.isArray(products) &&
@@ -198,11 +200,11 @@ let submitForm = () => {
 };
 //*************************************Supprimer individuellement chaque produit du panier*************************************/
 
-//Je sélection tous les bouttons créés à chaque ligne
-let btnDelete = document.getElementsByClassName("btnDeleteProduct");
-
 function deleteOneProductCart() {
   try {
+    //Je sélection tous les bouttons créés à chaque ligne
+    let btnDelete = document.getElementsByClassName("btnDeleteProduct");
+    let productSaveLocalStorage = JSON.parse(localStorage.getItem("product"));
     for (let i = 0; i < btnDelete.length; i++) {
       //J'écoute chacun des bouttons
       btnDelete[i].addEventListener("click", (e) => {

@@ -1,4 +1,4 @@
-//Je récupère dans le localstorage l'objet de la key Order envoyé par le backend
+//Je récupère dans le localstorage l'objet renvoyé par le backend
 function unityTestorderLocalstorage() {
   try {
     let orderLocalstorage = JSON.parse(localStorage.getItem("Order"));
@@ -7,7 +7,7 @@ function unityTestorderLocalstorage() {
     console.error("Parsing error:", e);
   }
 }
-//Convertion de l'objet en array pour ne récupérer que l'order envoyé par le backend
+//Je convertie cette objet en array pour ne récupérer que l'order envoyé par le backend
 
 function checkOrderTrueInLocalstorage() {
   let orderLocalstorageArray = Object.values(unityTestorderLocalstorage());

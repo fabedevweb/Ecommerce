@@ -1,5 +1,4 @@
-// Récupération de tous les produits avec la méthode GET ==> fetch
-
+// Récupération de tous les produits avec la méthode GET
 const fetchCameras = async () => {
   try {
     await fetch("http://localhost:3000/api/cameras")
@@ -18,10 +17,8 @@ const fetchCameras = async () => {
   }
 };
 
-//Sélection de l'élément DOM pour afficher tous mes produits
+//Affichage de tous les produits sur la page
 let productAccueil = document.getElementById("headErrorCamera");
-//Définir un tableau dans lequel mettre un produit
-//Il sera ensuite répéter pour chaque produit dans la boucle for i = 0; i < typeCameras.length + 1; i++
 
 const getCameras = async () => {
   await fetchCameras();
