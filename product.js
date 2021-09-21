@@ -150,9 +150,13 @@ let localStorageProduct = () => {
   //Je regarde s'il y a quelque-chose dans le LS avec getItem(format JSON)
   //Pour une meilleure lisibilité, je converti en JS avec JSON.parse.
   let productSaveLocalStorage = JSON.parse(localStorage.getItem("product"));
+  try {
+    productSaveLocalStorage;
+  } catch (e) {
+    console.error("Parsing error:", e);
+  }
   //S'il n'y a pas de clé product, créer un tableau, et l'ajouter au localstorage
-  if (productSaveLocalStorage == null) {
-    console.log("Aucune clé product dans le localstorage");
+  if (!productSaveLocalStorage) {
     productSaveLocalStorage = [];
     productSaveLocalStorage.push(cameraLocalstorage);
     localStorage.setItem("product", JSON.stringify(productSaveLocalStorage));
@@ -162,12 +166,11 @@ let localStorageProduct = () => {
     productSaveLocalStorage &&
     Array.isArray(productSaveLocalStorage)
   ) {
-    console.log("Clé product présente dans le localstorage");
     productSaveLocalStorage.push(cameraLocalstorage);
     localStorage.setItem("product", JSON.stringify(productSaveLocalStorage));
     console.log(Array.isArray(productSaveLocalStorage));
   }
-  if (Array.isArray(productSaveLocalStorage) == false) {
+  if (!Array.isArray(productSaveLocalStorage)) {
     console.error("L'objet envoyé n'est pas un array");
   }
 };

@@ -1,35 +1,53 @@
 //Je récupère dans le localstorage l'objet de la key Order envoyé par le backend
-let orderLocalstorage = JSON.parse(localStorage.getItem("Order"));
-
+function unityTestorderLocalstorage() {
+  try {
+    let orderLocalstorage = JSON.parse(localStorage.getItem("Order"));
+    return orderLocalstorage;
+  } catch {
+    console.error("Parsing error:", e);
+  }
+}
 //Convertion de l'objet en array pour ne récupérer que l'order envoyé par le backend
-let orderLocalstorageArray = Object.values(orderLocalstorage);
-if (orderLocalstorageArray[2] == undefined) {
-  console.error("Order non reçu");
-} else {
-  console.log("Order bien reçu");
+
+function checkOrderTrueInLocalstorage() {
+  let orderLocalstorageArray = Object.values(unityTestorderLocalstorage());
+  if (orderLocalstorageArray[2] == undefined) {
+    console.error("Order non reçu");
+  } else {
+    console.log("Order bien reçu");
+    return orderLocalstorageArray[2];
+  }
 }
 //Je récupère le prix total dans le localstorage
-let totalPriceLocalStorage = JSON.parse(localStorage.getItem("totalPrice"));
-
-document.querySelector(".thanks").innerHTML = `            <div class="row ">
-<div class="">
-    <div class="center-block  text-center ">
-        <div class="card-header ">
-        </div>
-        <div class="card-body ">
-        <h5 class="card-title">SUCCESSFUL</h5>
-        <p class="card-text">Your order has been sent</p>
-        <p class="card-text">Your Order : ${orderLocalstorageArray[2]}</p>
-        <p class="card-text">Total price : ${totalPriceLocalStorage}€ </p>
-        <p class="card-text">We thank you for your order</p>
-        <button class="btn btn-primary" onclick="clearLocalstorage()">Continue shopping</button>
-        </div>
-        <div class="card-footer text-muted">
+function thankForOrder() {
+  try {
+    let totalPriceLocalStorage = JSON.parse(localStorage.getItem("totalPrice"));
+    document.querySelector(
+      ".thanks"
+    ).innerHTML = `            <div class="row ">
+    <div class="">
+        <div class="center-block  text-center ">
+            <div class="card-header ">
+            </div>
+            <div class="card-body ">
+            <h5 class="card-title">SUCCESSFUL</h5>
+            <p class="card-text">Your order has been sent</p>
+            <p class="card-text">Your Order : ${checkOrderTrueInLocalstorage()}</p>
+            <p class="card-text">Total price : ${totalPriceLocalStorage}€ </p>
+            <p class="card-text">We thank you for your order</p>
+            <button class="btn btn-primary" onclick="clearLocalstorage()">Continue shopping</button>
+            </div>
+            <div class="card-footer text-muted">
+            </div>
         </div>
     </div>
-</div>
-</div>
-`;
+    </div>
+    `;
+  } catch {
+    console.log("Vérifier les variables");
+  }
+}
+thankForOrder();
 
 //Supprimer tout le contenu du localstorage
 let clearLocalstorage = () => {

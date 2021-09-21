@@ -1,11 +1,13 @@
 // JE regarde ce qu'il y a dans le LocaStorage avec getItem
 let productSaveLocalStorage = JSON.parse(localStorage.getItem("product"));
-
-try {
-  productSaveLocalStorage;
-} catch {
-  console.error("Parsing error:", e);
+function unityTestProductSaveLocalStorage() {
+  try {
+    productSaveLocalStorage;
+  } catch {
+    console.error("Parsing error:", e);
+  }
 }
+unityTestProductSaveLocalStorage();
 
 function showProductCartInTable() {
   try {
@@ -56,10 +58,10 @@ function showProductCartInTable() {
                        `
         )
         .join("");
-      document.getElementById("cartForm").style.display = "none";
+      document.getElementById("cartEmpy").style.display = "none";
     } else {
       document.getElementById("formConcat").style.display = "none";
-      document.getElementById("cartForm").style.display = "inline";
+      document.getElementById("cartEmpy").style.display = "inline";
     }
   } catch (e) {
     console.log("Veuillez pointer correctement dans le DOM " + e);
@@ -75,29 +77,35 @@ const regxCity = /^([0-9a-zA-Z\s'àâéèêôùûçÀÂÉÈÔÙÛÇs-]{1,50})$/;
 const regxEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/;
 
 // Variables qui testent chaque champ et valide au click submit ligne 179. Attend TRUE ou FALSE en sortie
-let secondValidationForm = () => {
-  let validFirstName = regxFirstName.test(
-    document.getElementById("firstName").value
-  );
-  let validLastName = regxFirstName.test(
-    document.getElementById("lastName").value
-  );
-  let validAddress = regxAddress.test(document.getElementById("address").value);
-  let validCity = regxCity.test(document.getElementById("city").value);
-  let validEmail = regxEmail.test(document.getElementById("email").value);
-  //*********************TEST VALIDATION FORMULAIRE************************/
-  if (
-    validFirstName &&
-    validLastName &&
-    validAddress &&
-    validCity &&
-    validEmail
-  ) {
-    return true;
-  } else {
-    return false;
+let validationForm = () => {
+  try {
+    let validFirstName = regxFirstName.test(
+      document.getElementById("firstName").value
+    );
+    let validLastName = regxFirstName.test(
+      document.getElementById("lastName").value
+    );
+    let validAddress = regxAddress.test(
+      document.getElementById("address").value
+    );
+    let validCity = regxCity.test(document.getElementById("city").value);
+    let validEmail = regxEmail.test(document.getElementById("email").value);
+    //*********************TEST VALIDATION FORMULAIRE************************/
+
+    let testValid =
+      validFirstName &&
+      validLastName &&
+      validAddress &&
+      validCity &&
+      validEmail;
+    let testValidTerner = testValid ? true : false;
+
+    return testValidTerner;
+  } catch {
+    console.log("Vérifiez que l'on pointe correctement sur le DOM");
   }
 };
+
 //*************FIN DE LA SECONDE VALIDATION FORMULAIRE****************/
 
 //Création d'une classe pour l'objet contact envoyé au backend
@@ -113,23 +121,19 @@ class Contact {
 
 //Création de l'objet contact envoyé au backend
 function formLocalstorage() {
-  try {
-    let contactForm = new Contact(
-      document.getElementById("firstName").value,
-      document.getElementById("lastName").value,
-      document.getElementById("address").value,
-      document.getElementById("city").value,
-      document.getElementById("email").value
-    );
-    return contactForm;
-  } catch (e) {
-    console.log("Erreur suivante" + e);
-  }
+  let contactForm = new Contact(
+    document.getElementById("firstName").value,
+    document.getElementById("lastName").value,
+    document.getElementById("address").value,
+    document.getElementById("city").value,
+    document.getElementById("email").value
+  );
+  return contactForm;
 }
 
 //****************************TEST OBJET CONTACT*************************************/
 //Je test que mon object contactForm correspond à ma classe Contact
-function testObjectContact() {
+function testFormLocalstorage() {
   let contactTest = formLocalstorage();
   if (contactTest instanceof Contact) {
   } else if (productSaveLocalStorage == 0) {
@@ -138,7 +142,7 @@ function testObjectContact() {
     console.log("Vérifier que l'objet correspond bien à la class Contact");
   }
 }
-testObjectContact();
+testFormLocalstorage();
 //****************************FIN DU TEST OBJET CONTACT*************************************/
 
 //Création du string array id à envoyer au backend
@@ -162,7 +166,7 @@ let submitForm = () => {
     if (
       contact === Object(contact) &&
       Array.isArray(products) &&
-      secondValidationForm()
+      validationForm()
     ) {
       console.log("contact est bien un objet et products un string array id");
       fetch("http://localhost:3000/api/cameras/order", {
@@ -182,8 +186,8 @@ let submitForm = () => {
           console.error("Erreur sur le POST de l'API");
         });
     } else {
-      alert(
-        "contact != object || product != string array id || testForm()=false"
+      console.log(
+        "contact != object || product != string array id || validationForm()=false"
       );
     }
 
@@ -215,9 +219,6 @@ function deleteOneProductCart() {
           JSON.stringify(productSaveLocalStorage)
         );
         //Je recharge la page pour afficher la mise à jour du Local storage sur la page
-        if (productSaveLocalStorage == 0) {
-          formLocalstorage() == null;
-        }
         location.reload();
       });
     }
