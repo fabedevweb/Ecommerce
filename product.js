@@ -15,7 +15,7 @@ class ProductCamera {
   }
 }
 
-// Appeller l'API pour afficher les produits en fonction de leur id
+// Renvoie l'élément correspondant à l'identifiant
 let fetchModelCameras = async () => {
   try {
     await fetch(`http://localhost:3000/api/cameras/${idCamera}`)
@@ -60,7 +60,7 @@ let showProductCamera = async () => {
               <p>${cameraOnPage.price / 100}€</p>
               <div class="mt-4 formOption ">
                 <form>
-                  <label for="option_produit"></label>
+                  <label for="option_produit">Custom lentilles</label>
                   <select name="option_produit" class="form-select" id="valueOption" aria-label="Default select example">
                     ${listLenses}
                   </select>

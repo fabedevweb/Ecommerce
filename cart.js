@@ -170,6 +170,7 @@ let submitForm = () => {
       validationForm()
     ) {
       console.log("contact est bien un objet et products un string array id");
+      //Retourne l'objet contact, le tableau produits et orderId (string)
       fetch("http://localhost:3000/api/cameras/order", {
         method: "POST",
         body: JSON.stringify(localStorageBackend),

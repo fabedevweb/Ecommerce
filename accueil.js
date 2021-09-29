@@ -1,4 +1,4 @@
-// Récupération de tous les produits avec la méthode GET
+// GET ==> Retourne un tableau de tous les éléments
 const fetchCameras = async () => {
   try {
     await fetch("http://localhost:3000/api/cameras")
