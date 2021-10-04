@@ -18,7 +18,7 @@ const fetchCameras = async () => {
 };
 
 //Affichage de tous les produits sur la page
-let productAccueil = document.getElementById("headErrorCamera");
+//let productAccueil = document.getElementById("headErrorCamera");
 
 const getCameras = async () => {
   await fetchCameras();

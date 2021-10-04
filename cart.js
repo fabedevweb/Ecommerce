@@ -169,7 +169,6 @@ let submitForm = () => {
       Array.isArray(products) &&
       validationForm()
     ) {
-      console.log("contact est bien un objet et products un string array id");
       //Retourne l'objet contact, le tableau produits et orderId (string)
       fetch("http://localhost:3000/api/cameras/order", {
         method: "POST",
@@ -210,9 +209,6 @@ function deleteOneProductCart() {
       //J'écoute chacun des bouttons
       btnDelete[i].addEventListener("click", (e) => {
         e.preventDefault();
-        //Vérification de la sélection d'un id unique
-        let remove = productSaveLocalStorage[i].id;
-        console.log(remove);
         //Quand je click sur un boutton je supprime dans le LocalStorage la ligne du tableau qui lui correspond
         productSaveLocalStorage.splice(i, 1);
         //Une fois la ligne du tableau supprimée, je réinjecte les lignes restantes dans le localstorage en écrasant l'ancienne key

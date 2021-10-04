@@ -8,9 +8,9 @@ function unityTestorderLocalstorage() {
   }
 }
 //Je convertie cette objet en array pour ne récupérer que l'order envoyé par le backend
-
 function checkOrderTrueInLocalstorage() {
   let orderLocalstorageArray = Object.values(unityTestorderLocalstorage());
+  //Si je ne reçois rien !
   if (orderLocalstorageArray[2] == undefined) {
     console.error("Order non reçu");
   } else {
