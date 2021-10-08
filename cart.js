@@ -1,5 +1,5 @@
 //J'importe mon objet présent dans le localstorage au format JS
-function unityTestProductSaveLocalStorage() {
+function parseProductSaveLocalStorage() {
   try {
     let productSaveLocalStorage = JSON.parse(localStorage.getItem("product"));
     return productSaveLocalStorage;
@@ -7,16 +7,16 @@ function unityTestProductSaveLocalStorage() {
     console.error("Parsing error:", e);
   }
 }
-unityTestProductSaveLocalStorage();
+parseProductSaveLocalStorage();
 
 //Afficher sur la page tous les produits sélectionnés
 function showProductCartInTable() {
   try {
-    if (unityTestProductSaveLocalStorage().length) {
+    if (parseProductSaveLocalStorage().length) {
       // Calcul du prix total
       let total = 0;
 
-      for (let cart of unityTestProductSaveLocalStorage()) {
+      for (let cart of parseProductSaveLocalStorage()) {
         total += cart.price / 100;
       }
       //Stocker le prix total pour l'afficher plus tard sur la page de confirmation de la commande
@@ -45,7 +45,7 @@ function showProductCartInTable() {
       //Ajouter dans le tableau tous les produits sélectionnés par l'utilisateur
       document.getElementById(
         "bodyTableCart"
-      ).innerHTML = unityTestProductSaveLocalStorage()
+      ).innerHTML = parseProductSaveLocalStorage()
         .map(
           (camera) => `
                        <tr id="${camera.id}">
@@ -138,7 +138,7 @@ function formLocalstorage() {
 function testFormLocalstorage() {
   let contactTest = formLocalstorage();
   if (contactTest instanceof Contact) {
-  } else if (!unityTestProductSaveLocalStorage()) {
+  } else if (!parseProductSaveLocalStorage()) {
     console.log("Le formulaire n'est plus disponible");
   } else {
     console.log("Vérifier que l'objet correspond bien à la class Contact");
@@ -149,7 +149,7 @@ testFormLocalstorage();
 
 //Création du string array id à envoyer au backend
 let products = [];
-for (let product of unityTestProductSaveLocalStorage()) {
+for (let product of parseProductSaveLocalStorage()) {
   let productsId = product.id;
   products.push(productsId);
 }
@@ -178,7 +178,7 @@ let submitForm = () => {
         },
       })
         .then((dataModel) => dataModel.json())
-        .then(function (value) {
+        .then(function(value) {
           console.log(value);
           localStorage.setItem("Order", JSON.stringify(value));
           window.location = "confirmation.html";
