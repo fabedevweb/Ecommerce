@@ -17,7 +17,7 @@ function showProductCartInTable() {
       let total = 0;
 
       for (let cart of parseProductSaveLocalStorage()) {
-        total += cart.price / 100;
+        total += cart.price / 100; // array.reduce((a,b)=>a+b, 0) ==> optimisation du calcul du tableau
       }
       //Stocker le prix total pour l'afficher plus tard sur la page de confirmation de la commande
       localStorage.setItem("totalPrice", JSON.stringify(total));

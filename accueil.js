@@ -18,13 +18,12 @@ const fetchCameras = async () => {
 };
 
 //Affichage de tous les produits sur la page
-//let productAccueil = document.getElementById("headErrorCamera");
 
 const getCameras = async () => {
   await fetchCameras();
 
   try {
-    document.getElementById("headErrorCamera").innerHTML = typeCameras
+    document.getElementById("headCamera").innerHTML = typeCameras
       .map(
         (model) => `
       

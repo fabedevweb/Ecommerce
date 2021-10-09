@@ -126,7 +126,6 @@ let functionOnclick = () => {
         </div>
       </div>
     </div>
-    
   </div>
   `;
   } else {
