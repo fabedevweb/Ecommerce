@@ -2,7 +2,8 @@ const uuid = require('uuid/v1');
 const Camera = require('../models/Camera');
 
 exports.getAllCameras = (req, res, next) => {
-  Camera.find().then(
+  Camera.find()
+  .then(
     (cameras) => {
       const mappedCameras = cameras.map((camera) => {
         camera.imageUrl = req.protocol + '://' + req.get('host') + '/images/' + camera.imageUrl;
