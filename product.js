@@ -52,7 +52,7 @@ let showProductCamera = async () => {
       for (let camera of modelCamera.lenses) {
         let listLenses = (modelCamera.lenses += `<option value="${camera}">${camera}</option>`);
         document.getElementById("product").innerHTML = `
-          <div class="card  mx-auto mt-5 mb-5 col-xxl-6">
+          <div class="card mx-auto mt-5 mb-5 col-xxl-6 border-0">
             <img src="${cameraOnPage.imageUrl}" class="card-img-top " alt="...">
             <div class="card-body">
               <h5 class="card-title">${cameraOnPage.name}</h5>

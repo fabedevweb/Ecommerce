@@ -27,14 +27,16 @@ const getCameras = async () => {
       .map(
         (model) => `
       
-    <div class="row row-cols-1  g-4 justify-content-center">
+    <div class="w-50 mx-auto">
       <a href="product.html?id=${
         model._id
-      }" class="card mb-3 text-dark bg-light">
+      }" class="card mb-3 text-dark bg-transparent border-0">
         <div class="card-body text-center ">
           <h2 class="card-title header-accueil">${model.name}</h2>
           <p class="paragraph-accueil">from ${model.price / 100}€</p>
-          <img src=${model.imageUrl} alt="" class="img-thumbnail img-fluid">
+          <img src=${
+            model.imageUrl
+          } alt="" class="img-thumbnail img-fluid w-75 border-0">
         </div>
       </a>
     </div>`
